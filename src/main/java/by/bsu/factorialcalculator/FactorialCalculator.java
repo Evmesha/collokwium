@@ -5,8 +5,25 @@ import by.bsu.exception.IncorrectParameter;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import by.springframework.http.MediaType;
+import by.springframework.http.ResponseEntity;
+import by.springframework.web.bind.annotation.PathVariable;
+import by.springframework.web.bind.annotation.RequestMapping;
+import by.springframework.web.bind.annotation.RequestMethod;
+import by.springframework.web.bind.annotation.RestController;
+
+@RestController
 
 public class FactorialCalculator {
+    private int num;
+
+    public int getNum() {
+        return num;
+    }
+
+    public void setNum(int num) {
+        this.num = num;
+    }
     public List<BigInteger> getFirstNFactorials(int n) throws IncorrectParameter {
         if (n < 0) {
             throw new IncorrectParameter("N cannot be negative");
@@ -48,5 +65,18 @@ public class FactorialCalculator {
             factorials.add(BigInteger.ONE);
             return BigInteger.ONE;
         }
+    }
+    @RequestMapping(value = "/fact/{num}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<RestRes> restMethod(@PathVariable int num)
+    {
+        RestRes result = new RestRes();
+
+        result.countFactorialRecursion(num);
+        result.getNum();
+        result.toString();
+        result.setNum(num);
+
+
+        return ResponseEntity.ok(result);
     }
 }
